@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+  <head>
+    <title>RC Car</title>
+    <style>
+      body { background-color: hsl(0, 0%, 12%);	color: hsl(0, 0%, 80%); font: 16px Arial; }
+      h1 { text-align: center; }
+      .controlFeedback { width: 45%; margin: 0 auto; }
+      img { display: block; width: 100%; margin: 0 auto; }	
+      p { text-align: left; }
+    </style>
+  </head>
+  <body>
+    <h1>RC Car</h1>
+    <div class = "controlFeedback">
+      <a href=http://raspberrypi:8081> <img src=http://raspberrypi:8081/ alt="Video Stream"></a>  <!-- @@@ should work when using raspberry pi -->
+      <p id="direction">Direction: </p>
+      <p id="speed">Speed: </p>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+      $(function () {   //makes sure that all the DOM elements of the page are ready before the executing the script
+
+        const RELEASED = 0; 
+        const PRESSED = 1; 
+        const NOT_INITIALIZED = 2 ;
+
+        const STOP = 'stop'; 
+        const FORWARD = 'forward';
+        const REVERSE = 'reverse';
+        const SOFT_RIGHT = 'soft right';
+        const SOFT_LEFT = 'soft left';
+        const HARD_RIGHT = 'hard right'; 
+        const HARD_LEFT = 'hard left';
+        
+        const W_KEY = 0;
+        const S_KEY = 1; 
+        const D_KEY = 2; 
+        const A_KEY = 3; 
+        const PLUS_KEY = 4; 
+        const MINUS_KEY = 5; 
+
+        const NUMBER_OF_KEYS = 6; 
+
+        var keyState = [];
+        var lastDirectionEmitted = STOP; 
+
+        for(let i = 0; i < NUMBER_OF_KEYS; i++) {
+          keyState[i] = NOT_INITIALIZED; 
+        }
+
+        var socket = io();
+
+        $(window).keydown(function(e) {   
+          if(e.key === 'w' || e.key === 'W') keyState[W_KEY] = PRESSED; 
+          else if(e.key === 's' || e.key === 'S') keyState[S_KEY] = PRESSED; 
+          else if(e.key === 'd' || e.key === 'D') keyState[D_KEY] = PRESSED;           
+          else if(e.key === 'a' || e.key === 'A') keyState[A_KEY] = PRESSED;    
+          else if(e.key === '+' && keyState[PLUS_KEY] !== PRESSED) {
+            socket.emit('speed request', 'increase'); 
+            keyState[PLUS_KEY] = PRESSED;  
+          }
+          else if(e.key === '-' && keyState[MINUS_KEY] !== PRESSED) {
+            socket.emit('speed request', 'decrease'); 
+            keyState[MINUS_KEY] = PRESSED; 
+          }
+          emitUpdatedDirection(); 
+        });
+
+        $(window).keyup(function(e) {
+          if(e.key === 'w' || e.key === 'W') keyState[W_KEY] = RELEASED; 
+          else if(e.key === 's' || e.key === 'S') keyState[S_KEY] = RELEASED; 
+          else if(e.key === 'd' || e.key === 'D') keyState[D_KEY] = RELEASED; 
+          else if(e.key === 'a' || e.key === 'A') keyState[A_KEY] = RELEASED; 
+          else if(e.key === '+') keyState[PLUS_KEY] = RELEASED; 
+          else if(e.key === '-') keyState[MINUS_KEY] = RELEASED; 
+          emitUpdatedDirection(); 
+        });
+
+        function emitUpdatedDirection() {
+          if(keyState[W_KEY] !== PRESSED && keyState[S_KEY] !== PRESSED && keyState[D_KEY] !== PRESSED && keyState[A_KEY] !== PRESSED) {
+            if(lastDirectionEmitted !== STOP) {
+              socket.emit('direction request', STOP); 
+              lastDirectionEmitted = STOP; 
+            }
+          }
+          else if(keyState[W_KEY] === PRESSED && keyState[D_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== SOFT_RIGHT) {
+              socket.emit('direction request', SOFT_RIGHT); 
+              lastDirectionEmitted = SOFT_RIGHT; 
+            }
+          }
+          else if(keyState[W_KEY] === PRESSED && keyState[A_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== SOFT_LEFT) {
+              socket.emit('direction request', SOFT_LEFT); 
+              lastDirectionEmitted = SOFT_LEFT; 
+            }
+          }          
+          else if(keyState[W_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== FORWARD) {
+              socket.emit('direction request', FORWARD); 
+              lastDirectionEmitted = FORWARD;
+            }
+          }
+          else if(keyState[S_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== REVERSE) {
+              socket.emit('direction request', REVERSE); 
+              lastDirectionEmitted = REVERSE; 
+            }
+          }
+          else if(keyState[D_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== HARD_RIGHT) {
+              socket.emit('direction request', HARD_RIGHT);
+              lastDirectionEmitted = HARD_RIGHT;
+            }
+          }
+          else if(keyState[A_KEY] === PRESSED) {
+            if(lastDirectionEmitted !== HARD_LEFT) {
+              socket.emit('direction request', HARD_LEFT)
+              lastDirectionEmitted = HARD_LEFT;
+            }            
+          }
+        }
+        socket.on('direction update', function(direction) {   
+          $('#direction').text('Direction : ' + direction);    
+        });     
+        socket.on('speed update', function(speedPercentage) {   
+          $('#speed').text('Speed : ' + speedPercentage);    
+        });        
+      });
+    </script>
+  </body>
+</html>
+
