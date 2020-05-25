@@ -26,8 +26,21 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
    - changed rotate from 0 to 180 (depending on how the camera module is mounted)
    - changed quality from 75 to 25
    - changed stream_quality from 50 to 25
-3) To test out motion video streaming, go to a browser such as Google Chrome, and type: "raspberrypi.8081". If that doesn't work, try manually writing out the IP address of the Raspberry Pi instead of using the hostname. Use the port that is specified in motion.conf. 
+3) To test out motion video streaming, go to a browser such as Google Chrome, and type: "raspberrypi.8081". If that doesn't work, try manually writing out the IP address of the Raspberry Pi instead of using the hostname. Use the port that is specified in motion.conf. Motion should automatically start, but if it doesn't, try running "sudo service motion start". Once you set the state to start, the Pi should remember to start the motion service every time you boot afterwards. 
 4) Enable remote GPIO:
    - "sudo raspi-config" -> "Interfacing Options" -> Enable remote GPIO
    - reboot to make sure changes take effect 
-5) 
+5) Clone the RC Car project to the home directory on the Raspberry Pi:
+   - sudo apt-get install git
+   - git clone https://github.com/RyanFenn/RC-Car.git   
+6) Install npm packages:
+   - sudo apt-get install pigio (this is the C library and it is a prerequisite for Node.js module)
+   - sudo apt-get install npm
+   - cd RC-Car
+   - npm install
+     - this installs dependencies defined in package.json (express, socket.io, pigio)
+7) Run server.js on start-up:
+   - sudo nano /etc/rc.local -> add "sudo node ~/RC-Car/server.js" to the list (under the modprobe command)
+   @@@ not working
+ 
+8) Go to a browser such as Google Chrome and type in "raspberrypi:8089" to connect to the server (use IP address if hostname doesn't work). 
