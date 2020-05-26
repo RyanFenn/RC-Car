@@ -63,8 +63,8 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
       
    3) ```sudo systemctl enable rc-car.service```
    4) ```sudo systemctl start rc-car.service```
-   5) Make sure it is running properly: ```sudo systemctl status nodeserver.service```
-   6) If the service file is modified -> ```sudo systemctl daemon-reload``` and then ```sudo systemctl restart nodeserver.service```
+   5) Make sure it is running properly: ```sudo systemctl status rc-car.service```
+   6) If the service file is modified -> ```sudo systemctl daemon-reload``` and then ```sudo systemctl restart rc-car.service```
    7) To find the Process ID: ```ps -ef | grep server.js```
    
    (reference material for step 7: https://www.axllent.org/docs/view/nodejs-service-with-systemd/)
