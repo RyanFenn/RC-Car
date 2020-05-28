@@ -33,8 +33,7 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
    - reboot to make sure changes take effect 
 5) Clone the RC Car project to the Raspberry Pi:
    - ```sudo apt-get install git```
-   - make directory -> ```mkdir ~/RC-Car```
-   - go into the directory -> ```cd ~/RC-Car```
+   - make sure you are in the home directory
    - ```git clone https://github.com/RyanFenn/RC-Car.git```   
 6) Install npm packages:
    - ```sudo apt-get install pigio``` (this is the C library and it is a prerequisite for Node.js module)
