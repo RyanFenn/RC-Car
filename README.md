@@ -31,7 +31,7 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
 4) Enable remote GPIO:
    - ```sudo raspi-config``` -> "Interfacing Options" -> Enable remote GPIO
    - reboot to make sure changes take effect 
-5) Clone the RC Car project to theRaspberry Pi:
+5) Clone the RC Car project to the Raspberry Pi:
    - ```sudo apt-get install git```
    - make directory -> ```mkdir ~/RC-Car```
    - go into the directory -> ```cd ~/RC-Car```
