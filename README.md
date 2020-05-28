@@ -31,8 +31,10 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
 4) Enable remote GPIO:
    - ```sudo raspi-config``` -> "Interfacing Options" -> Enable remote GPIO
    - reboot to make sure changes take effect 
-5) Clone the RC Car project to the home directory on the Raspberry Pi:
+5) Clone the RC Car project to theRaspberry Pi:
    - ```sudo apt-get install git```
+   - make directory -> ```mkdir ~/RC-Car```
+   - go into the directory -> ```cd ~/RC-Car```
    - ```git clone https://github.com/RyanFenn/RC-Car.git```   
 6) Install npm packages:
    - ```sudo apt-get install pigio``` (this is the C library and it is a prerequisite for Node.js module)
