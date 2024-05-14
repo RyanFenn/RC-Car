@@ -17,7 +17,7 @@ This project uses a Raspberry Pi to control the RC Car over Wi-Fi. The car has a
 **Setup on Raspberry Pi:**
 1) Follow the instructions on this website to flash the Lite version of Raspbian (headless setup): https://desertbot.io/blog/headless-raspberry-pi-4-ssh-wifi-setup . Don't bother installing Bonjour as instructed.
 2) Install motion for video streaming: https://raspberry-valley.azurewebsites.net/Streaming-Video-with-Motion/ . Note that the motion.conf file may not appear exactly the same and variables may have different names. Here is a list of all the changes I made to the motion.conf file (in nano editor, use CNTL+W and ALT+W for keyword search):
-   - changed daemon changed from off to on
+   - changed daemon from off to on
    - changed stream_localhost from on to off (used to be called webcam_localhost)
    - stream_port left at 8081 (change if you want)
    - changed webcontrol_localhost from on to off 
